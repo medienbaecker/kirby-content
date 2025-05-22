@@ -1,0 +1,34 @@
+{
+  "name": "kirby-content",
+  "displayName": "Kirby Content",
+  "description": "Syntax highlighting for Kirby content files",
+  "publisher": "medienbaecker",
+  "preview": true,
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "kirby-content",
+        "extensions": [],
+        "filenamePatterns": [
+          "**/content/**/*.md",
+          "**/content/**/*.txt"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kirby-content",
+        "scopeName": "text.kirby-content",
+        "path": "./syntaxes/kirby-content.tmLanguage.json",
+        "embeddedLanguages": {
+          "text.html.markdown": "markdown"
+        }
+      }
+    ]
+  }
+}

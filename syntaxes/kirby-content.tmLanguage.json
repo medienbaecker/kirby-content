@@ -1,0 +1,23 @@
+{
+  "name": "Kirby Content",
+  "scopeName": "text.kirby-content",
+  "fileTypes": ["md", "txt"],
+  "patterns": [
+    {
+      "begin": "^([A-Za-z0-9_-]+):",
+      "beginCaptures": {
+        "1": { "name": "entity.name.tag.fieldname.kirby-content" }
+      },
+      "end": "^----$",
+      "endCaptures": {
+        "0": { "name": "punctuation.separator.kirby-content" }
+      },
+      "contentName": "markup.field.kirby-content",
+      "patterns": [
+        {
+          "include": "text.html.markdown"
+        }
+      ]
+    }
+  ]
+}
