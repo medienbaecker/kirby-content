@@ -54,15 +54,19 @@ Example:
 
 When you select some text and paste a URL or email address, it automatically converts the selected text into a link.
 
-- **Markdown** (default): `[text](url)` or `[text](mailto:email)`
-- **Kirbytags**: `(link: url text: text)` or `(email: email text: text)`
+- **Kirbytags** (default): `(link: url text: text)` or `(email: email text: text)`
+- **Markdown**: `[text](url)` or `[text](mailto:email)`
 
 ## Settings
 
-Change the link format:
+Configure automatic link creation:
 
 ```json
 {
-  "kirby-content.linkStyle": "kirbytags" // default: "markdown"
+  "kirby-content.automaticLinks": "kirbytags" // "markdown", "kirbytags", or false
 }
 ```
+
+- `"kirbytags"` (default): Create Kirby kirbytags
+- `"markdown"`: Create markdown links
+- `false`: Disable automatic link creation

@@ -10,17 +10,39 @@ class KirbyContentPasteProvider implements vscode.DocumentPasteEditProvider {
         const pastedText = textData?.value.trim();
         const range = ranges[0];
         
-        // Nothing to work with
         if (!pastedText || !range || range.isEmpty) return;
 
-        const selectedText = document.getText(range).trim();
-        if (!selectedText) return;
-
-        const config = vscode.workspace.getConfiguration('kirby-content');
-        const useKirbytags = config.get<string>('linkStyle') === 'kirbytags';
+        const isUrl = /^https?:\/\/\S+$/.test(pastedText);
+        const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pastedText);
         
-        // Check if it looks like a URL
-        if (/^https?:\/\/\S+$/.test(pastedText)) {
+        if (!isUrl && !isEmail) return;
+
+        const line = document.lineAt(range.start.line);
+        const lineText = line.text;
+        const selectionStart = range.start.character;
+        const selectionEnd = range.end.character;
+
+        // Don't create nested links
+        const markdownLinkMatch = this.findMarkdownLinkContext(lineText, selectionStart, selectionEnd);
+        const kirbytagMatch = this.findKirbytagContext(lineText, selectionStart, selectionEnd);
+        
+        if (markdownLinkMatch || kirbytagMatch) {
+            return undefined;
+        }
+
+        // Check if automatic links are enabled
+        const config = vscode.workspace.getConfiguration('kirby-content');
+        const linkMode = config.get<string | boolean>('automaticLinks');
+        
+        if (linkMode === false) {
+            return undefined;
+        }
+
+        // Create new link from selected text
+        const selectedText = document.getText(range).trim();
+        const useKirbytags = linkMode === 'kirbytags';
+
+        if (isUrl) {
             const linkText = useKirbytags 
                 ? `(link: ${pastedText} text: ${selectedText})`
                 : `[${selectedText}](${pastedText})`;
@@ -33,8 +55,7 @@ class KirbyContentPasteProvider implements vscode.DocumentPasteEditProvider {
             )];
         }
         
-        // Check if it's an email
-        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(pastedText)) {
+        if (isEmail) {
             const linkText = useKirbytags
                 ? `(email: ${pastedText} text: ${selectedText})`
                 : `[${selectedText}](mailto:${pastedText})`;
@@ -46,6 +67,48 @@ class KirbyContentPasteProvider implements vscode.DocumentPasteEditProvider {
                 vscode.DocumentDropOrPasteEditKind.Empty.append('text', useKirbytags ? 'kirbytag' : 'markdown', 'link')
             )];
         }
+    }
+
+    private findMarkdownLinkContext(lineText: string, selStart: number, selEnd: number) {
+        // Detect markdown links: [text](url)
+        const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+        let match;
+        
+        while ((match = linkRegex.exec(lineText)) !== null) {
+            const linkStart = match.index;
+            const linkEnd = match.index + match[0].length;
+            
+            if (selStart >= linkStart && selEnd <= linkEnd) {
+                return {
+                    start: linkStart,
+                    end: linkEnd,
+                    text: match[1],
+                    url: match[2]
+                };
+            }
+        }
+        return null;
+    }
+
+    private findKirbytagContext(lineText: string, selStart: number, selEnd: number) {
+        // Detect any kirbytag: (tagname: content)
+        const kirbytagRegex = /\(([a-zA-Z][a-zA-Z0-9]*):([^)]+)\)/g;
+        let match;
+        
+        while ((match = kirbytagRegex.exec(lineText)) !== null) {
+            const tagStart = match.index;
+            const tagEnd = match.index + match[0].length;
+            
+            if (selStart >= tagStart && selEnd <= tagEnd) {
+                return {
+                    start: tagStart,
+                    end: tagEnd,
+                    tagName: match[1],
+                    content: match[2].trim()
+                };
+            }
+        }
+        return null;
     }
 }
 

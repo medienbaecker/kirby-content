@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/medienbaecker/kirby-content"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "icon": "images/icon.png",
   "main": "./out/extension.js",
   "activationEvents": [
@@ -42,18 +42,20 @@
     "configuration": {
       "title": "Kirby Content",
       "properties": {
-        "kirby-content.linkStyle": {
+        "kirby-content.automaticLinks": {
           "type": "string",
-          "default": "markdown",
+          "default": "kirbytags",
           "enum": [
             "markdown",
-            "kirbytags"
+            "kirbytags",
+            false
           ],
           "enumDescriptions": [
-            "Markdown links: [text](url)",
-            "Kirbytags: (link: url text: text)"
+            "Create markdown links: [text](url)",
+            "Create kirbytags: (link: url text: text)",
+            "Disable automatic link creation"
           ],
-          "description": "Choose link format when pasting URLs"
+          "description": "Automatic link creation when pasting URLs"
         }
       }
     },
