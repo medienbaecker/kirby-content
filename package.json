@@ -1,15 +1,19 @@
 {
   "name": "kirby-content",
   "displayName": "Kirby Content Syntax",
-  "description": "Syntax highlighting for Kirby content files",
+  "description": "Syntax highlighting and link helpers for Kirby content files",
   "publisher": "medienbaecker",
-  "preview": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/medienbaecker/kirby-content"
   },
-  "version": "0.0.2",
+  "version": "0.1.0",
   "icon": "images/icon.png",
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:kirby-content",
+    "onLanguage:markdown"
+  ],
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -34,6 +38,49 @@
           "text.html.markdown": "markdown"
         }
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Kirby Content",
+      "properties": {
+        "kirby-content.linkStyle": {
+          "type": "string",
+          "default": "markdown",
+          "enum": [
+            "markdown",
+            "kirbytags"
+          ],
+          "enumDescriptions": [
+            "Markdown links: [text](url)",
+            "Kirbytags: (link: url text: text)"
+          ],
+          "description": "Choose link format when pasting URLs"
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[kirby-content]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.detectIndentation": false,
+        "editor.pasteAs.enabled": true
+      }
+    },
+    "markdown": {
+      "extensions": [
+        {
+          "id": "kirby-content"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/node": "^16.x",
+    "typescript": "^4.4.4"
   }
 }

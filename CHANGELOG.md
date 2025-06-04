@@ -1,12 +1,9 @@
 # Change Log
 
-All notable changes to the "kirby-content" extension will be documented in this file.
+## 0.1.0
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## 0.0.1
-
-- Initial release
+- Smart link pasting: select text + paste URL/email = instant link
+- Support for both markdown links (default) and Kirbytags
 
 ## 0.0.2
 
@@ -14,3 +11,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Added repository URL to package.json
 - Fixed README formatting
 - Added icon
+
+## 0.0.1
+
+- Initial release
