@@ -33,7 +33,7 @@ It's relatively intelligent, for example preventing nested links when pasting ov
 
 ### Meta Data File Creation
 
-Right-click any file in your content folder → "Create meta data file" to:
+Right-click any file in your content folder → "Create Meta Data File" to:
 
 - Create an empty meta data file (`image.jpg.txt` or `document.pdf.md`)
 - Open it immediately for editing

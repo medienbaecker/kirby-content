@@ -1,13 +1,13 @@
 {
   "name": "kirby-content",
   "displayName": "Kirby Content Syntax",
-  "description": "Syntax highlighting and link helpers for Kirby content files",
+  "description": "Syntax highlighting, smart links, and meta data file creation for Kirby content files",
   "publisher": "medienbaecker",
   "repository": {
     "type": "git",
     "url": "https://github.com/medienbaecker/kirby-content"
   },
-  "version": "0.2.1",
+  "version": "0.2.2",
   "icon": "images/icon.png",
   "main": "./out/extension.js",
   "activationEvents": [
@@ -61,7 +61,10 @@
         "kirby-content.contentFileExtension": {
           "type": "string",
           "default": "txt",
-          "enum": ["txt", "md"],
+          "enum": [
+            "txt",
+            "md"
+          ],
           "enumDescriptions": [
             "Use .txt extension for content/metadata files (Kirby default)",
             "Use .md extension for content/metadata files"
@@ -73,7 +76,7 @@
     "commands": [
       {
         "command": "kirby-content.createMetadataFile",
-        "title": "Create meta data file"
+        "title": "Create Meta Data File"
       }
     ],
     "menus": {

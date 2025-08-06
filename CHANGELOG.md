@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.2
+
+- Changed "Create meta data file" to title case "Create Meta Data File" so it matches other right-click options
+
 ## 0.2.1
 
 - Who forgot to update the README for the last release?
