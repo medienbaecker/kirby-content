@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.1
+
+- Who forgot to update the README for the last release?
+
 ## 0.2.0
 
 - New: Right-click files in your content folder to create meta data files

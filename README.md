@@ -1,10 +1,12 @@
 # Kirby Content
 
-Syntax highlighting and link helpers for [Kirby](https://getkirby.com/) content files.
+Syntax highlighting, smart links, and meta data file creation for [Kirby](https://getkirby.com/) content files.
 
-## Syntax Highlighting
+## Features
 
-It automatically applies to all `.md` and `.txt` files within the `content` directory and highlights content files that look like this:
+### Syntax Highlighting
+
+Automatically highlights `.md` and `.txt` files within the `content` directory that look like this:
 
 ```
 Title: My Page Title
@@ -18,17 +20,51 @@ Text: This is some **markdown** content.
 Date: 2025-05-16
 ```
 
-For now, I've added tokens for the field names, the values and the separators. Markdown highlighting is also included for the field values.
+Field names, content, and separators (`----`) are highlighted with Markdown syntax support for field values.
 
-### Theming
+### Smart Link Pasting
 
-Want to customize colors? Here are the scopes:
+Select text and paste a URL or email to create links automatically:
 
-- `entity.name.tag.fieldname.kirby-content` - field names
-- `markup.field.kirby-content` - field content
-- `punctuation.separator.kirby-content` - those `----` lines
+- **URL pasting**: `(link: https://example.com text: selected text)`
+- **Email pasting**: `(email: hello@example.com text: selected text)`
 
-Example:
+It's relatively intelligent, for example preventing nested links when pasting over existing links.
+
+### Meta Data File Creation
+
+Right-click any file in your content folder → "Create meta data file" to:
+
+- Create an empty meta data file (`image.jpg.txt` or `document.pdf.md`)
+- Open it immediately for editing
+- Works with any file type (images, PDFs, videos, etc.)
+
+You can find more information about meta data files in the [Kirby docs about "Managing files"](https://getkirby.com/docs/guide/files#adding-meta-data-to-your-files).
+
+## Settings
+
+```json
+{
+  "kirby-content.automaticLinks": "kirbytags",
+  "kirby-content.contentFileExtension": "txt"
+}
+```
+
+**Link Format**
+
+- `"kirbytags"` (default): `(link: url text: text)`
+- `"markdown"`: `[text](url)`
+- `false`: Disable automatic links
+
+**Content File Extension**
+
+- `"txt"` (default): Create `.txt` meta data files
+- `"md"`: Create `.md` meta data files
+- Configure per workspace to match your Kirby site
+
+## Theming
+
+Customize colors with these scopes:
 
 ```json
 "editor.tokenColorCustomizations": {
@@ -50,23 +86,6 @@ Example:
 }
 ```
 
-## Smart link pasting
-
-When you select some text and paste a URL or email address, it automatically converts the selected text into a link.
-
-- **Kirbytags** (default): `(link: url text: text)` or `(email: email text: text)`
-- **Markdown**: `[text](url)` or `[text](mailto:email)`
-
-## Settings
-
-Configure automatic link creation:
-
-```json
-{
-  "kirby-content.automaticLinks": "kirbytags" // "markdown", "kirbytags", or false
-}
-```
-
-- `"kirbytags"` (default): Create Kirby kirbytags
-- `"markdown"`: Create markdown links
-- `false`: Disable automatic link creation
+- `entity.name.tag.fieldname.kirby-content` - field names
+- `markup.field.kirby-content` - field content
+- `punctuation.separator.kirby-content` - separators (`----`)
