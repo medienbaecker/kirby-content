@@ -7,12 +7,13 @@
     "type": "git",
     "url": "https://github.com/medienbaecker/kirby-content"
   },
-  "version": "0.1.1",
+  "version": "0.2.0",
   "icon": "images/icon.png",
   "main": "./out/extension.js",
   "activationEvents": [
     "onLanguage:kirby-content",
-    "onLanguage:markdown"
+    "onLanguage:markdown",
+    "onCommand:kirby-content.createMetadataFile"
   ],
   "engines": {
     "vscode": "^1.60.0"
@@ -56,8 +57,33 @@
             "Disable automatic link creation"
           ],
           "description": "Automatic link creation when pasting URLs"
+        },
+        "kirby-content.contentFileExtension": {
+          "type": "string",
+          "default": "txt",
+          "enum": ["txt", "md"],
+          "enumDescriptions": [
+            "Use .txt extension for content/metadata files (Kirby default)",
+            "Use .md extension for content/metadata files"
+          ],
+          "description": "File extension for Kirby content and meta data files"
         }
       }
+    },
+    "commands": [
+      {
+        "command": "kirby-content.createMetadataFile",
+        "title": "Create meta data file"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourcePath =~ /\\/content\\// && !explorerResourceIsFolder",
+          "command": "kirby-content.createMetadataFile",
+          "group": "kirby@1"
+        }
+      ]
     },
     "configurationDefaults": {
       "[kirby-content]": {

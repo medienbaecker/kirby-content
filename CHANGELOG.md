@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.2.0
+
+- New: Right-click files in your content folder to create meta data files
+- Support for both `.txt` and `.md` content files (can be a workspace-specific setting)
+
+## 0.1.2
+
+- Fixed: Pasting URLs over selected URLs now replaces them instead of creating kirbytags
+
 ## 0.1.1
 
 - Fixed: Pasting URLs into existing links now replaces the URL instead of creating nested links

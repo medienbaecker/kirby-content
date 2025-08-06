@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
+import * as fs from 'fs';
 
 class KirbyContentPasteProvider implements vscode.DocumentPasteEditProvider {
     async provideDocumentPasteEdits(
@@ -43,6 +45,14 @@ class KirbyContentPasteProvider implements vscode.DocumentPasteEditProvider {
         const useKirbytags = linkMode === 'kirbytags';
 
         if (isUrl) {
+            if (selectedText && /^https?:\/\/\S+$/.test(selectedText)) {
+                return [new vscode.DocumentPasteEdit(
+                    pastedText,
+                    'Replace URL',
+                    vscode.DocumentDropOrPasteEditKind.Empty.append('text', 'plain')
+                )];
+            }
+            
             const linkText = useKirbytags 
                 ? `(link: ${pastedText} text: ${selectedText})`
                 : `[${selectedText}](${pastedText})`;
@@ -127,6 +137,46 @@ export function activate(context: vscode.ExtensionContext) {
                 pasteMimeTypes: ['text/plain']
             }
         )
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('kirby-content.createMetadataFile', async (uri: vscode.Uri) => {
+            if (!uri) {
+                vscode.window.showErrorMessage('No file selected');
+                return;
+            }
+
+            const filePath = uri.fsPath;
+            const dir = path.dirname(filePath);
+            const fileName = path.basename(filePath);
+            const fileExtension = path.extname(filePath).toLowerCase().slice(1);
+            
+            const config = vscode.workspace.getConfiguration('kirby-content');
+            const contentExtension = config.get<string>('contentFileExtension', 'txt');
+            
+            if (fileExtension === contentExtension) {
+                vscode.window.showErrorMessage(`Cannot create meta data files for .${contentExtension} files`);
+                return;
+            }
+            
+            const metadataFileName = `${fileName}.${contentExtension}`;
+            const metadataFilePath = path.join(dir, metadataFileName);
+            
+            if (fs.existsSync(metadataFilePath)) {
+                const doc = await vscode.workspace.openTextDocument(metadataFilePath);
+                await vscode.window.showTextDocument(doc);
+                return;
+            }
+            
+            try {
+                fs.writeFileSync(metadataFilePath, '');
+                
+                const doc = await vscode.workspace.openTextDocument(metadataFilePath);
+                await vscode.window.showTextDocument(doc);
+            } catch (error) {
+                vscode.window.showErrorMessage(`Failed to create meta data file: ${error}`);
+            }
+        })
     );
 }
 
